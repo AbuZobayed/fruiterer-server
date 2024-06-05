@@ -35,7 +35,6 @@ function verifyToken(req, res, next) {
 
 const uri = process.env.DATABASE_URL;
 
-
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -52,6 +51,22 @@ async function run() {
     const fruitsCollection = productDB1.collection("fruitsCollection");
     const userCollection = userDb.collection("userCollection");
 
+    // app.post("/search", async (req, res) => {
+    //   try {
+    //     const { searchData } = req.body;
+    //     console.log(searchData);
+    //     const result = await fruitsCollection
+    //       .find({ $text: { $search: searchData } })
+    //       .toArray(); 
+    //     console.log(result);
+    //     //  const data = await result.toArray()
+    //     //  console.log(data);
+    //     res.send(result);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // });
+
     // product routes
     app.post("/fruits", verifyToken, async (req, res) => {
       const fruitsData = req.body;
@@ -59,7 +74,6 @@ async function run() {
       res.send(result);
     });
 
-    
     app.get("/fruits", async (req, res) => {
       const fruitsData = fruitsCollection.find();
       const result = await fruitsData.toArray();
@@ -72,7 +86,7 @@ async function run() {
       });
       res.send(fruitsData);
     });
-    app.patch("/fruits/:id",  async (req, res) => {
+    app.patch("/fruits/:id", async (req, res) => {
       const id = req.params.id;
       const updateData = req.body;
       const fruitsData = await fruitsCollection.updateOne(
